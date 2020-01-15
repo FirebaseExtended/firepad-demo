@@ -10,9 +10,14 @@ function joinFirepadForHash() {
 
   var id = window.location.hash.replace(/#/g, '') || randomString(10);
   var url = window.location.toString().replace(/#.*/, '') + '#' + id;
-  var firepadRef = new Firebase('https://firepad.firebaseio.com/demo').child(id);
+  firebase.initializeApp({
+    apiKey: '<API_KEY>',
+    authDomain: "firepad.firebaseapp.com",
+    databaseURL: "https://firepad.firebaseio.com"
+  });
+  var firepadRef = firebase.database().ref('demo').child(id);
 
-  var userId = firepadRef.push().name(); // Just a random ID.
+  var userId = firepadRef.push().key; // Just a random ID.
   codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
   firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
       { richTextToolbar: true, richTextShortcuts: true, userId: userId});
